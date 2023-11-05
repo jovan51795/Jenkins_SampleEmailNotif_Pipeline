@@ -1,21 +1,13 @@
 pipeline {
     agent any
     tools {
-    maven 'Apache Maven 3.8.6'
+        maven 'Apache Maven 3.8.6'
     }
     environment {
-            PATH_TO_TRUSTSTORE = 'C:/Users/JCABATUAN/Desktop/certs'
-        }
+        PATH_TO_TRUSTSTORE = 'C:/Users/JCABATUAN/Desktop/certs'
+        JAVA_OPTS = "-Djavax.net.ssl.trustStore=${PATH_TO_TRUSTSTORE}/cacerts -Djavax.net.ssl.trustStorePassword=changeit -Dhudson.tasks.MailSender.SEND_TO_UNKNOWN_USERS=true -Dhudson.tasks.MailSender.SEND_TO_USERS_WITHOUT_READ=true"
+    }
     stages {
-//         stage('Add certificate') {
-//             steps {
-//                 script {
-//                     withEnv(['JAVA_OPTS=-Djavax.net.ssl.trustStore=$PATH_TO_TRUSTSTORE/cacerts -Djavax.net.ssl.trustStorePassword=changeit']) {
-//
-//                     }
-//                 }
-//             }
-//         }
         stage('Checkout') {
             steps {
                 script {
@@ -36,25 +28,12 @@ pipeline {
     }
     post {
         always {
-            script {
-                withEnv([
-                'JAVA_OPTS=-Djavax.net.ssl.trustStore=$PATH_TO_TRUSTSTORE/cacerts -Djavax.net.ssl.trustStorePassword=changeit',
-                'JAVA_OPTS=-Dhudson.tasks.MailSender.SEND_TO_UNKNOWN_USERS=true',
-                'JAVA_OPTS=-Dhudson.tasks.MailSender.SEND_TO_USERS_WITHOUT_READ=true'
-                ]) {
-                    emailext (
-                        body: 'A Test EMail',
-                        recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], //,
-                        subject: 'Test',
-                        to: 'jovscb@gmail.com'
-                    )
-                }
-            }
+            emailext (
+                body: 'A Test EMail',
+                recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                subject: 'Test',
+                to: 'jovscb@gmail.com'
+            )
         }
     }
-//     post {
-//         always {
-//             emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
-//         }
-//     }
 }
