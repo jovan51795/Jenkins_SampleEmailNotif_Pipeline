@@ -3,7 +3,19 @@ pipeline {
     tools {
     maven 'Apache Maven 3.8.6'
     }
+    environment {
+            PATH_TO_TRUSTSTORE = 'C:/Users/JCABATUAN/Desktop/certs'
+        }
     stages {
+        stage('Add certificate') {
+            steps {
+                script {
+                    withEnv(['JAVA_OPTS=-Djavax.net.ssl.trustStore=$PATH_TO_TRUSTSTORE/cacerts -Djavax.net.ssl.trustStorePassword=changeit']) {
+
+                    }
+                }
+            }
+        }
         stage('Checkout') {
             steps {
                 script {
@@ -24,7 +36,11 @@ pipeline {
     }
     post {
         always {
-            emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
+            emailext {
+                body: 'A Test EMail',
+                recipientProviders: [[$class: 'DevelopersRecipientProvider'],
+                [$class: 'RequesterRecipientProvider']], subject: 'Test'
+            }
         }
     }
 }
