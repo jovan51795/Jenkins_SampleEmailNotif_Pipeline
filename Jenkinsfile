@@ -5,7 +5,7 @@ pipeline {
     }
     environment {
         PATH_TO_TRUSTSTORE = 'C:/Users/JCABATUAN/Desktop/certs'
-        JAVA_OPTS = "-Djavax.net.ssl.trustStore=${PATH_TO_TRUSTSTORE}/cacerts -Djavax.net.ssl.trustStorePassword=changeit -Dhudson.tasks.MailSender.SEND_TO_UNKNOWN_USERS=true -Dhudson.tasks.MailSender.SEND_TO_USERS_WITHOUT_READ=true"
+        JAVA_OPTS = "-Djavax.net.ssl.trustStore=${PATH_TO_TRUSTSTORE}/cacerts -Djavax.net.ssl.trustStorePassword=changeit -Dhudson.tasks.MailSender.SEND_TO_UNKNOWN_USERS=true -Dhudson.tasks.MailSender.SEND_TO_USERS_WITHOUT_READ=true -Djdk.tls.client.protocols=TLSv1.2"
     }
     stages {
         stage('Checkout') {
