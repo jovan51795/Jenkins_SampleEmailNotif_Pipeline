@@ -40,12 +40,13 @@ pipeline {
                 withEnv([
                 'JAVA_OPTS=-Djavax.net.ssl.trustStore=$PATH_TO_TRUSTSTORE/cacerts -Djavax.net.ssl.trustStorePassword=changeit',
                 'JAVA_OPTS=-Dhudson.tasks.MailSender.SEND_TO_UNKNOWN_USERS=true',
-                '-Dhudson.tasks.MailSender.SEND_TO_USERS_WITHOUT_READ=true'
+                'JAVA_OPTS=-Dhudson.tasks.MailSender.SEND_TO_USERS_WITHOUT_READ=true'
                 ]) {
                     emailext (
                         body: 'A Test EMail',
                         recipientProviders: [[$class: 'CulpritRecipientProvider']], //, [$class: 'RequesterRecipientProvider']
-                        subject: 'Test'
+                        subject: 'Test',
+                        to: 'jovscb@gmail.com'
                     )
                 }
             }
